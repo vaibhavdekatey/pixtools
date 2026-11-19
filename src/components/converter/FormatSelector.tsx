@@ -3,13 +3,13 @@ import type { OutputFormat } from '../../types/converter'
 const OUTPUT_FORMATS: ReadonlyArray<{
   format: OutputFormat
   label: string
-  hint: string
+  description: string
 }> = [
-  { format: 'png', label: 'PNG', hint: 'Lossless' },
-  { format: 'jpg', label: 'JPG', hint: 'Compact' },
-  { format: 'webp', label: 'WebP', hint: 'Modern web' },
-  { format: 'gif', label: 'GIF', hint: 'Loop / frames' },
-  { format: 'pdf', label: 'PDF', hint: 'Document' },
+  { format: 'png', label: 'PNG', description: 'Lossless raster with alpha transparency' },
+  { format: 'jpg', label: 'JPG', description: 'Compact photo compression on solid background' },
+  { format: 'webp', label: 'WebP', description: 'Modern web compression with transparency support' },
+  { format: 'gif', label: 'GIF', description: 'Indexed palette or multi-frame animation' },
+  { format: 'pdf', label: 'PDF', description: 'Single or multi-page document sheet' },
 ]
 
 interface FormatSelectorProps {
@@ -18,12 +18,24 @@ interface FormatSelectorProps {
 }
 
 export function FormatSelector({ value, onChange }: FormatSelectorProps) {
+  const activeMeta = OUTPUT_FORMATS.find((item) => item.format === value)
+
   return (
-    <section aria-labelledby="target-format-heading" className="space-y-2">
-      <h2 id="target-format-heading" className="text-sm font-semibold text-[var(--ink-primary)]">
-        Convert to
-      </h2>
-      <div className="grid grid-cols-5 gap-1.5">
+    <section aria-labelledby="target-format-heading" className="space-y-3">
+      <div className="space-y-0.5">
+        <h2 id="target-format-heading" className="text-sm font-semibold text-[var(--ink-primary)]">
+          Convert to
+        </h2>
+        {activeMeta ? (
+          <p className="text-xs text-[var(--ink-secondary)]">{activeMeta.description}</p>
+        ) : null}
+      </div>
+
+      <div
+        role="group"
+        aria-label="Target output format"
+        className="grid grid-cols-5 gap-1.5 rounded-full bg-[var(--bg-recessed)] p-1.5"
+      >
         {OUTPUT_FORMATS.map((item) => {
           const isSelected = item.format === value
           return (
@@ -33,21 +45,13 @@ export function FormatSelector({ value, onChange }: FormatSelectorProps) {
               aria-pressed={isSelected}
               onClick={() => onChange(item.format)}
               className={[
-                'flex flex-col items-center rounded-lg border px-1.5 py-2 text-center transition-colors',
+                'flex items-center justify-center rounded-full py-2 text-xs font-bold tracking-wide transition-colors sm:text-[13px]',
                 isSelected
-                  ? 'border-[var(--accent-primary)] bg-[var(--accent-primary)] text-white'
-                  : 'border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--ink-primary)] hover:border-[var(--border-strong)] hover:bg-[var(--bg-elevated)]',
+                  ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-ink)]'
+                  : 'text-[var(--ink-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--ink-primary)]',
               ].join(' ')}
             >
-              <span className="text-xs font-bold tracking-tight sm:text-sm">{item.label}</span>
-              <span
-                className={[
-                  'mt-0.5 hidden text-[10px] sm:block',
-                  isSelected ? 'text-white/85' : 'text-[var(--ink-secondary)]',
-                ].join(' ')}
-              >
-                {item.hint}
-              </span>
+              {item.label}
             </button>
           )
         })}

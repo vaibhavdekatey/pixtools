@@ -74,7 +74,7 @@ export function QrStyleControls({
   return (
     <section
       aria-labelledby="qr-style-heading"
-      className="space-y-4 border-t border-[var(--border-hairline)] pt-4"
+      className="space-y-4 pt-2"
     >
       <h2 id="qr-style-heading" className="text-sm font-semibold text-[var(--ink-primary)]">
         Output &amp; geometry
@@ -106,7 +106,7 @@ export function QrStyleControls({
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3.5">
         <div className="space-y-1.5">
           <span className="block text-xs font-medium text-[var(--ink-secondary)]">
             Error correction
@@ -135,7 +135,7 @@ export function QrStyleControls({
       </div>
 
       {/* Optional Center Logo Overlay */}
-      <div className="space-y-2.5 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-elevated)] p-3">
+      <div className="space-y-2.5 rounded-xl bg-[var(--bg-elevated)] p-3.5">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-medium text-[var(--ink-primary)]">
             Center logo overlay (optional)
@@ -218,7 +218,7 @@ export function QrStyleControls({
         ) : (
           <label
             htmlFor={logoInputId}
-            className="flex cursor-pointer items-center justify-between gap-2 rounded-md border border-dashed border-[var(--border-strong)] bg-[var(--bg-surface)] px-3 py-2 text-xs text-[var(--ink-secondary)] transition-colors hover:border-[var(--accent-primary)] hover:text-[var(--ink-primary)]"
+            className="flex cursor-pointer items-center justify-between gap-2 rounded-lg bg-[var(--bg-surface)] px-3 py-2 text-xs text-[var(--ink-secondary)] transition-colors hover:bg-[var(--bg-recessed)] hover:text-[var(--ink-primary)]"
           >
             <span>Add a PNG, SVG, JPG, or WebP emblem</span>
             <span className="inline-flex items-center gap-1 font-medium text-[var(--accent-primary)]">
@@ -247,10 +247,10 @@ export function QrStyleControls({
                   })
                 }
                 className={[
-                  'inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors',
+                  'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors',
                   isSelected
-                    ? 'border-[var(--accent-primary)] bg-[var(--accent-primary-soft)] text-[var(--ink-primary)]'
-                    : 'border-[var(--border-hairline)] bg-[var(--bg-elevated)] text-[var(--ink-secondary)] hover:text-[var(--ink-primary)]',
+                    ? 'bg-[#2a3f54] text-[#e0f2fe]'
+                    : 'bg-[var(--bg-elevated)] text-[var(--ink-secondary)] hover:text-[var(--ink-primary)]',
                 ].join(' ')}
               >
                 <span
@@ -269,7 +269,7 @@ export function QrStyleControls({
           <label htmlFor="qr-fg-color" className="block text-xs font-medium text-[var(--ink-secondary)]">
             Modules color
           </label>
-          <div className="flex items-center gap-2 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-2 py-1.5">
+          <div className="flex items-center gap-2 rounded-lg bg-[var(--bg-elevated)] px-2.5 py-1.5">
             <input
               id="qr-fg-color"
               type="color"
@@ -293,7 +293,7 @@ export function QrStyleControls({
           </label>
           <div
             className={[
-              'flex items-center gap-2 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-2 py-1.5',
+              'flex items-center gap-2 rounded-lg bg-[var(--bg-elevated)] px-2.5 py-1.5',
               settings.transparentBackground ? 'opacity-55' : '',
             ].join(' ')}
           >
@@ -337,7 +337,7 @@ export function QrStyleControls({
           value={fileNameBase}
           onChange={(e) => onChangeFileNameBase(e.target.value)}
           placeholder="qr-code"
-          className="w-full rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-3 py-1.5 text-sm text-[var(--ink-primary)] focus:border-[var(--accent-primary)] focus:outline-none"
+          className="w-full rounded-lg bg-[var(--bg-elevated)] px-3 py-2 text-sm text-[var(--ink-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]"
         />
       </div>
     </section>

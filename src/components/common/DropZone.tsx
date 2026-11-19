@@ -56,11 +56,11 @@ export function DropZone({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={[
-        'rounded-lg border border-dashed transition-colors',
-        compact ? 'px-3.5 py-3' : 'px-5 py-6',
+        'rounded-xl transition-colors',
+        compact ? 'px-3.5 py-3' : 'px-5 py-7',
         isDragging
-          ? 'border-[var(--accent-primary)] bg-[var(--accent-primary-soft)]'
-          : 'border-[var(--border-strong)] bg-[var(--bg-elevated)] hover:border-[var(--accent-primary)]',
+          ? 'bg-[var(--accent-primary-soft)] ring-1 ring-[var(--accent-primary)]'
+          : 'bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated-hover)]',
       ].join(' ')}
     >
       <input
@@ -75,14 +75,14 @@ export function DropZone({
       <label
         htmlFor={inputId}
         className={[
-          'flex cursor-pointer items-center gap-3',
+          'flex cursor-pointer items-center gap-3.5',
           compact ? 'flex-row justify-between' : 'flex-col text-center',
         ].join(' ')}
       >
         <div
           className={[
-            'flex items-center justify-center rounded-md border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--accent-primary)]',
-            compact ? 'h-9 w-9 shrink-0' : 'h-11 w-11',
+            'flex items-center justify-center rounded-full bg-[var(--accent-primary-soft)] text-[var(--accent-primary)]',
+            compact ? 'size-9 shrink-0' : 'size-12',
           ].join(' ')}
         >
           <UploadIcon width={18} height={18} />
@@ -92,7 +92,7 @@ export function DropZone({
           <p className="mt-0.5 text-xs text-[var(--ink-secondary)]">{subtitle}</p>
         </div>
         {compact ? (
-          <span className="shrink-0 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-surface)] px-2.5 py-1 text-xs font-medium text-[var(--ink-primary)]">
+          <span className="shrink-0 rounded-full bg-[var(--bg-surface)] px-3 py-1 text-xs font-semibold text-[var(--ink-primary)]">
             Add files
           </span>
         ) : null}

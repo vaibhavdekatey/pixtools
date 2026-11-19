@@ -199,8 +199,8 @@ export default function QrWorkspace() {
   const combinedError = qrGeneration.error ?? exportError
 
   return (
-    <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(340px,430px)_minmax(0,1fr)]">
-      <div className="space-y-5 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)] p-4 sm:p-5">
+    <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(340px,430px)_minmax(0,1fr)]">
+      <div className="space-y-6 rounded-xl bg-[var(--bg-surface)] p-5 sm:p-6">
         <QrPayloadForm
           settings={settings}
           encodedPayload={livePayload}
@@ -221,12 +221,12 @@ export default function QrWorkspace() {
           }
         />
 
-        <div className="border-t border-[var(--border-hairline)] pt-3 lg:hidden">
+        <div className="pt-1 lg:hidden">
           <button
             type="button"
             aria-expanded={mobileStyleOpen}
             onClick={() => setMobileStyleOpen((prev) => !prev)}
-            className="flex w-full items-center justify-between rounded-md border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-3 py-2 text-left text-xs font-medium text-[var(--ink-primary)]"
+            className="flex w-full items-center justify-between rounded-xl bg-[var(--bg-elevated)] px-3.5 py-2.5 text-left text-xs font-medium text-[var(--ink-primary)] hover:bg-[var(--bg-elevated-hover)]"
           >
             <span>
               {settings.moduleStyle} modules, {settings.size} px, ECC {settings.errorCorrection}

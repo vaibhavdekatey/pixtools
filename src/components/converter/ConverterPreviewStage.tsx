@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { ConversionPreviewResult, OutputFormat } from '../../types/converter'
 import {
   buildOutputFileName,
@@ -8,7 +8,7 @@ import {
   sanitizeFileBase,
 } from '../../utils/format'
 import { NoticeBanner } from '../common/NoticeBanner'
-import { ArchiveIcon, DownloadIcon, LayersIcon } from '../icons/Icons'
+import { ArchiveIcon, CollapseIcon, DownloadIcon, ExpandIcon, LayersIcon } from '../icons/Icons'
 import { PageArtifactStrip } from './PageArtifactStrip'
 import { PdfPreviewView } from './PdfPreviewView'
 import { SplitCompareView } from './SplitCompareView'
@@ -51,6 +51,27 @@ export function ConverterPreviewStage({
   onDownloadBatchQueueZip,
 }: ConverterPreviewStageProps) {
   const [artifactIndex, setArtifactIndex] = useState(0)
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  useEffect(() => {
+    if (!isExpanded) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsExpanded(false)
+    }
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [isExpanded])
+
+  useEffect(() => {
+    if (!result && isExpanded) {
+      setIsExpanded(false)
+    }
+  }, [result, isExpanded])
 
   const artifacts = result?.pages
   const safeArtifactIndex = artifacts
@@ -78,11 +99,15 @@ export function ConverterPreviewStage({
   return (
     <section
       aria-labelledby="converter-preview-heading"
-      className="flex flex-col overflow-hidden rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)]"
+      className={
+        isExpanded
+          ? 'fixed inset-0 z-50 flex flex-col overflow-y-auto bg-[var(--bg-surface)]'
+          : 'flex flex-col overflow-hidden rounded-xl bg-[var(--bg-surface)]'
+      }
     >
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-hairline)] px-4 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-5 pt-5 pb-3">
         <div>
-          <h2 id="converter-preview-heading" className="text-sm font-semibold text-[var(--ink-primary)]">
+          <h2 id="converter-preview-heading" className="text-base font-semibold tracking-tight text-[var(--ink-primary)]">
             Conversion preview
           </h2>
           <p className="text-xs text-[var(--ink-secondary)]">
@@ -90,31 +115,45 @@ export function ConverterPreviewStage({
           </p>
         </div>
 
-        {isConverting ? (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-2.5 py-1 text-xs font-medium text-[var(--accent-primary)]">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--accent-primary)]" />
-            <span>Rendering preview</span>
-          </span>
-        ) : result && delta ? (
-          <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="tabular-nums rounded-md border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-2 py-0.5 text-[var(--ink-secondary)]">
-              {formatBytes(result.originalSize)} → {formatBytes(result.convertedSize)}
+        <div className="flex flex-wrap items-center gap-2">
+          {isConverting ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-elevated)] px-3 py-1 text-xs font-medium text-[var(--accent-primary)]">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--accent-primary)]" />
+              <span>Rendering preview</span>
             </span>
-            <span
-              className={[
-                'tabular-nums rounded-md border px-2 py-0.5 font-semibold',
-                delta.isReduction
-                  ? 'border-[var(--accent-signal-border)] bg-[var(--accent-signal-soft)] text-[var(--accent-signal)]'
-                  : 'border-[var(--border-hairline)] bg-[var(--bg-elevated)] text-[var(--ink-secondary)]',
-              ].join(' ')}
+          ) : result && delta ? (
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="tabular-nums rounded-full bg-[var(--bg-elevated)] px-3 py-1 text-[var(--ink-secondary)]">
+                {formatBytes(result.originalSize)} → {formatBytes(result.convertedSize)}
+              </span>
+              <span
+                className={[
+                  'tabular-nums rounded-full px-3 py-1 font-semibold',
+                  delta.isReduction
+                    ? 'bg-[var(--accent-signal-soft)] text-[var(--accent-primary)]'
+                    : 'bg-[var(--bg-elevated)] text-[var(--ink-secondary)]',
+                ].join(' ')}
+              >
+                {delta.label}
+              </span>
+            </div>
+          ) : null}
+
+          {result && result.kind === 'pdf-output' ? (
+            <button
+              type="button"
+              onClick={() => setIsExpanded((v) => !v)}
+              aria-label={isExpanded ? 'Exit expanded preview' : 'Expand preview'}
+              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-elevated)] px-3 py-1 text-xs font-semibold text-[var(--ink-primary)] hover:bg-[var(--bg-elevated-hover)]"
             >
-              {delta.label}
-            </span>
-          </div>
-        ) : null}
+              {isExpanded ? <CollapseIcon width={14} height={14} /> : <ExpandIcon width={14} height={14} />}
+              <span>{isExpanded ? 'Close' : 'Expand'}</span>
+            </button>
+          ) : null}
+        </div>
       </div>
 
-      <div className="p-4">
+      <div className={isExpanded ? 'flex min-h-0 flex-1 flex-col px-5 pb-2' : 'p-4'}>
         {errorMessage ? (
           <div className="mb-3">
             <NoticeBanner tone="error" message={errorMessage} />
@@ -153,8 +192,8 @@ export function ConverterPreviewStage({
         ) : null}
 
         {!result ? (
-          <div className="optical-well-grid flex min-h-[290px] flex-col items-center justify-center rounded-md border border-[var(--border-hairline)] p-6 text-center sm:min-h-[380px]">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--ink-muted)]">
+          <div className="optical-well-grid flex min-h-[290px] flex-col items-center justify-center rounded-xl p-6 text-center sm:min-h-[380px]">
+            <div className="flex size-12 items-center justify-center rounded-full bg-[var(--bg-elevated)] text-[var(--ink-secondary)]">
               <LayersIcon width={22} height={22} />
             </div>
             <p className="mt-3 text-sm font-medium text-[var(--ink-primary)]">
@@ -167,7 +206,7 @@ export function ConverterPreviewStage({
         ) : null}
 
         {result && result.kind === 'pdf-output' && result.pdfSheets ? (
-          <PdfPreviewView sheets={result.pdfSheets} />
+          <PdfPreviewView sheets={result.pdfSheets} isExpanded={isExpanded} />
         ) : null}
 
         {result && (result.kind === 'image' || result.kind === 'animated-gif') ? (
@@ -176,11 +215,13 @@ export function ConverterPreviewStage({
             originalUrl={result.originalCompareUrl}
             altLabel={result.fileName}
             isAnimated={result.kind === 'animated-gif'}
+            isExpanded={isExpanded}
+            onToggleExpand={() => setIsExpanded((v) => !v)}
           />
         ) : null}
 
         {result && (result.kind === 'pdf-pages' || result.kind === 'gif-frames') && activeArtifact ? (
-          <div className="space-y-3">
+          <div className={isExpanded ? 'flex min-h-0 flex-1 flex-col gap-3' : 'space-y-3'}>
             <PageArtifactStrip
               artifacts={artifacts ?? []}
               activeIndex={safeArtifactIndex}
@@ -191,6 +232,8 @@ export function ConverterPreviewStage({
               convertedUrl={activeArtifact.url}
               originalUrl={activeArtifact.originalPreviewUrl}
               altLabel={`${result.fileName} ${activeArtifact.label}`}
+              isExpanded={isExpanded}
+              onToggleExpand={() => setIsExpanded((v) => !v)}
             />
           </div>
         ) : null}
@@ -200,7 +243,7 @@ export function ConverterPreviewStage({
         ) : null}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border-hairline)] bg-[var(--bg-surface)] px-4 py-3.5">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-5 pb-5 pt-2">
         <div className="font-mono-data text-xs text-[var(--ink-secondary)]">
           {result
             ? activeArtifact
@@ -211,12 +254,12 @@ export function ConverterPreviewStage({
             : 'PNG, JPG, WebP, GIF, PDF'}
         </div>
 
-        <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+        <div className="flex w-full flex-wrap items-center gap-2.5 sm:w-auto">
           <button
             type="button"
             disabled={!result || isConverting || isExportingBatch}
             onClick={() => onDownloadPrimary(safeArtifactIndex)}
-            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[var(--accent-primary)] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[var(--accent-primary-hover)] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-initial"
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--accent-primary)] px-5 py-2.5 text-sm font-bold text-[var(--accent-primary-ink)] hover:bg-[var(--accent-primary-hover)] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-initial"
           >
             <DownloadIcon width={16} height={16} />
             <span>
@@ -231,7 +274,7 @@ export function ConverterPreviewStage({
               type="button"
               disabled={!result || isConverting || isExportingBatch}
               onClick={onDownloadMultiArtifactsZip}
-              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[var(--border-strong)] bg-[var(--bg-surface)] px-3.5 py-2.5 text-sm font-semibold text-[var(--ink-primary)] transition-colors hover:bg-[var(--bg-elevated)] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-initial"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--bg-elevated)] px-4 py-2.5 text-sm font-semibold text-[var(--ink-primary)] hover:bg-[var(--bg-elevated-hover)] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-initial"
             >
               <ArchiveIcon width={16} height={16} />
               <span>
@@ -247,7 +290,7 @@ export function ConverterPreviewStage({
               type="button"
               disabled={!result || isConverting || isExportingBatch}
               onClick={onDownloadBatchQueueZip}
-              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[var(--border-strong)] bg-[var(--bg-surface)] px-3.5 py-2.5 text-sm font-semibold text-[var(--ink-primary)] transition-colors hover:bg-[var(--bg-elevated)] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-initial"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--bg-elevated)] px-4 py-2.5 text-sm font-semibold text-[var(--ink-primary)] hover:bg-[var(--bg-elevated-hover)] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-initial"
             >
               <ArchiveIcon width={16} height={16} />
               <span>

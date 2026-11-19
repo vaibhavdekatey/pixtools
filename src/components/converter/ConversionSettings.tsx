@@ -85,7 +85,7 @@ export function ConversionSettings({
   return (
     <section
       aria-labelledby="conversion-settings-heading"
-      className="space-y-4 border-t border-[var(--border-hairline)] pt-4"
+      className="space-y-4 pt-2"
     >
       <h2 id="conversion-settings-heading" className="text-sm font-semibold text-[var(--ink-primary)]">
         Conversion options
@@ -123,7 +123,7 @@ export function ConversionSettings({
           <label htmlFor="jpg-matte" className="text-xs font-medium text-[var(--ink-secondary)]">
             Transparency background fill
           </label>
-          <div className="flex items-center gap-2 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)] px-2 py-1">
+          <div className="flex items-center gap-2 rounded-lg bg-[var(--bg-elevated)] px-2.5 py-1.5">
             <input
               id="jpg-matte"
               type="color"
@@ -169,7 +169,7 @@ export function ConversionSettings({
       ) : null}
 
       {showGifOptions ? (
-        <div className="space-y-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-elevated)] p-3">
+        <div className="space-y-3 rounded-xl bg-[var(--bg-elevated)] p-3.5">
           {(hasMultipleFiles || hasMultiPagePdf) ? (
             <label className="flex items-center gap-2 text-xs font-medium text-[var(--ink-primary)]">
               <input
@@ -220,7 +220,7 @@ export function ConversionSettings({
       ) : null}
 
       {showPdfOptions ? (
-        <div className="space-y-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-elevated)] p-3">
+        <div className="space-y-3 rounded-xl bg-[var(--bg-elevated)] p-3.5">
           {hasMultipleFiles ? (
             <label className="flex items-center gap-2 text-xs font-medium text-[var(--ink-primary)]">
               <input
@@ -300,9 +300,9 @@ export function ConversionSettings({
               type="range"
               aria-label="Scale percentage"
               min={10}
-              max={200}
+              max={100}
               step={5}
-              value={options.scalePercent}
+              value={Math.min(100, options.scalePercent)}
               onChange={(e) => onUpdate({ scalePercent: Number(e.target.value) })}
               className="studio-range"
             />
@@ -342,10 +342,10 @@ export function ConversionSettings({
                       })
                     }}
                     className={[
-                      'rounded-md border px-2 py-1 text-[11px] font-medium transition-colors',
+                      'rounded-full px-3 py-1 text-[11px] font-semibold transition-colors',
                       isActive
-                        ? 'border-[var(--accent-primary)] bg-[var(--accent-primary-soft)] text-[var(--ink-primary)]'
-                        : 'border-[var(--border-hairline)] bg-[var(--bg-elevated)] text-[var(--ink-secondary)] hover:text-[var(--ink-primary)]',
+                        ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-ink)]'
+                        : 'bg-[var(--bg-elevated)] text-[var(--ink-secondary)] hover:text-[var(--ink-primary)]',
                     ].join(' ')}
                   >
                     {preset.label}
@@ -383,7 +383,7 @@ export function ConversionSettings({
                       onUpdate({ customWidth: val })
                     }
                   }}
-                  className="font-mono-data w-full rounded-md border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-2.5 py-1.5 text-xs text-[var(--ink-primary)] focus:border-[var(--accent-primary)] focus:outline-none"
+                  className="font-mono-data w-full rounded-lg bg-[var(--bg-elevated)] px-3 py-2 text-xs text-[var(--ink-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]"
                 />
               </div>
               <div className="space-y-1">
@@ -414,7 +414,7 @@ export function ConversionSettings({
                       onUpdate({ customHeight: val })
                     }
                   }}
-                  className="font-mono-data w-full rounded-md border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-2.5 py-1.5 text-xs text-[var(--ink-primary)] focus:border-[var(--accent-primary)] focus:outline-none"
+                  className="font-mono-data w-full rounded-lg bg-[var(--bg-elevated)] px-3 py-2 text-xs text-[var(--ink-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]"
                 />
               </div>
             </div>
@@ -432,7 +432,13 @@ export function ConversionSettings({
         ) : null}
       </div>
 
-      <p className="border-t border-[var(--border-hairline)] pt-3 text-[11px] leading-relaxed text-[var(--ink-muted)]">
+      {options.targetFormat === 'png' && activeItem?.sourceFormat === 'jpg' ? (
+        <p className="rounded-lg bg-[var(--bg-elevated)] px-3 py-2 text-[11px] leading-relaxed text-[var(--ink-secondary)]">
+          Encoded as 24-bit RGB PNG without an alpha channel. Because PNG is lossless, files converted from lossy JPG remain larger than the source.
+        </p>
+      ) : null}
+
+      <p className="pt-1 text-[11px] leading-relaxed text-[var(--ink-muted)]">
         EXIF orientation is applied automatically; camera EXIF and GPS metadata are stripped on re-encode.
       </p>
     </section>

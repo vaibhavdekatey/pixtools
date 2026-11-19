@@ -25,7 +25,7 @@ const WIFI_ENCRYPTION_OPTIONS: readonly SegmentedOption<QrWifiEncryption>[] = [
 ]
 
 const FIELD_CLASS =
-  'w-full rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-3 py-2 text-sm text-[var(--ink-primary)] placeholder:text-[var(--ink-muted)] focus:border-[var(--accent-primary)] focus:outline-none'
+  'w-full rounded-lg bg-[var(--bg-elevated)] px-3 py-2 text-sm text-[var(--ink-primary)] placeholder:text-[var(--ink-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]'
 
 interface QrPayloadFormProps {
   settings: QrSettings
@@ -64,7 +64,7 @@ export function QrPayloadForm({
       <div
         role="group"
         aria-label="QR content type"
-        className="grid grid-cols-3 gap-1 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-recessed)] p-1"
+        className="grid grid-cols-3 gap-1 rounded-xl bg-[var(--bg-recessed)] p-1"
       >
         {MODE_OPTIONS.map((option) => {
           const isActive = option.value === settings.mode
@@ -75,9 +75,9 @@ export function QrPayloadForm({
               aria-pressed={isActive}
               onClick={() => onChangeMode(option.value)}
               className={[
-                'whitespace-nowrap rounded-md px-2.5 py-1.5 text-center text-xs font-medium transition-colors sm:text-sm',
+                'whitespace-nowrap rounded-lg px-2.5 py-1.5 text-center text-xs font-semibold transition-colors sm:text-[13px]',
                 isActive
-                  ? 'bg-[var(--bg-surface)] text-[var(--ink-primary)] shadow-xs ring-1 ring-[var(--border-hairline)]'
+                  ? 'bg-[#2a3f54] text-[#e0f2fe]'
                   : 'text-[var(--ink-secondary)] hover:text-[var(--ink-primary)]',
               ].join(' ')}
             >
@@ -382,7 +382,7 @@ export function QrPayloadForm({
       ) : null}
 
       {settings.mode !== 'text' && encodedPayload ? (
-        <div className="rounded-md border border-[var(--border-hairline)] bg-[var(--bg-recessed)] px-2.5 py-2">
+        <div className="rounded-lg bg-[var(--bg-recessed)] px-3 py-2.5">
           <p className="text-[11px] font-medium text-[var(--ink-secondary)]">Encoded payload</p>
           <p className="font-mono-data mt-0.5 break-all whitespace-pre-wrap text-xs text-[var(--ink-primary)]">
             {encodedPayload}

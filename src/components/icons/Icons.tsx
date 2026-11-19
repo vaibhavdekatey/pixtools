@@ -158,3 +158,46 @@ export function ArchiveIcon(props: IconProps) {
     </svg>
   )
 }
+
+export function ExpandIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <path d="M15 3h6v6" />
+      <path d="M9 21H3v-6" />
+      <path d="m21 3-7 7" />
+      <path d="m3 21 7-7" />
+    </svg>
+  )
+}
+
+export function CollapseIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <path d="M4 14h6v6" />
+      <path d="M20 10h-6V4" />
+      <path d="m14 10 7-7" />
+      <path d="m3 21 7-7" />
+    </svg>
+  )
+}
+
+export function ZoomInIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m21 21-4.35-4.35" />
+      <path d="M11 8v6" />
+      <path d="M8 11h6" />
+    </svg>
+  )
+}
+
+export function ZoomOutIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m21 21-4.35-4.35" />
+      <path d="M8 11h6" />
+    </svg>
+  )
+}

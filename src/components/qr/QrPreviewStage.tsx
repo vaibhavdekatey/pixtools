@@ -29,11 +29,11 @@ export function QrPreviewStage({
   return (
     <section
       aria-labelledby="qr-preview-heading"
-      className="flex flex-col overflow-hidden rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)]"
+      className="flex flex-col overflow-hidden rounded-xl bg-[var(--bg-surface)]"
     >
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-hairline)] px-4 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-5 pt-5 pb-3">
         <div>
-          <h2 id="qr-preview-heading" className="text-sm font-semibold text-[var(--ink-primary)]">
+          <h2 id="qr-preview-heading" className="text-base font-semibold tracking-tight text-[var(--ink-primary)]">
             QR preview
           </h2>
           <p className="text-xs text-[var(--ink-secondary)]">
@@ -45,59 +45,61 @@ export function QrPreviewStage({
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span
               className={[
-                'rounded-md border px-2 py-0.5 font-medium tabular-nums',
+                'rounded-full px-3 py-1 font-semibold tabular-nums',
                 output.isLowContrast || output.isInverted
-                  ? 'border-[var(--warning-border)] bg-[var(--warning-soft)] text-[var(--warning)]'
-                  : 'border-[var(--accent-signal-border)] bg-[var(--accent-signal-soft)] text-[var(--accent-signal)]',
+                  ? 'bg-[var(--warning-soft)] text-[var(--warning)]'
+                  : 'bg-[var(--accent-signal-soft)] text-[var(--accent-primary)]',
               ].join(' ')}
             >
               Contrast {contrastLabel}
             </span>
-            <span className="font-mono-data rounded-md border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-2 py-0.5 text-[var(--ink-secondary)]">
+            <span className="font-mono-data rounded-full bg-[var(--bg-elevated)] px-3 py-1 text-[var(--ink-secondary)]">
               {output.moduleCount}×{output.moduleCount} modules
             </span>
           </div>
         ) : null}
       </div>
 
-      <div className="optical-well-grid relative flex min-h-[290px] items-center justify-center p-6 sm:min-h-[380px] sm:p-10">
-        {output ? (
-          <div className="relative rounded-md border border-[var(--border-strong)] bg-[var(--bg-surface)] p-3 shadow-md">
-            <div
-              className={[
-                'relative flex h-[220px] w-[220px] items-center justify-center overflow-hidden rounded-xs sm:h-[272px] sm:w-[272px]',
-                settings.transparentBackground ? 'optical-checkerboard' : '',
-              ].join(' ')}
-            >
+      <div className="px-5">
+        <div className="optical-well-grid relative flex min-h-[290px] items-center justify-center rounded-xl p-6 sm:min-h-[380px] sm:p-10">
+          {output ? (
+            <div className="relative rounded-xl bg-[var(--bg-surface)] p-3.5 shadow-xl">
               <div
-                className="h-full w-full [&>svg]:h-full [&>svg]:w-full"
-                dangerouslySetInnerHTML={{ __html: output.svgMarkup }}
-              />
+                className={[
+                  'relative flex h-[220px] w-[220px] items-center justify-center overflow-hidden rounded-lg sm:h-[272px] sm:w-[272px]',
+                  settings.transparentBackground ? 'optical-checkerboard' : '',
+                ].join(' ')}
+              >
+                <div
+                  className="h-full w-full [&>svg]:h-full [&>svg]:w-full"
+                  dangerouslySetInnerHTML={{ __html: output.svgMarkup }}
+                />
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="flex max-w-xs flex-col items-center text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--ink-muted)]">
-              <QrIcon width={22} height={22} />
+          ) : (
+            <div className="flex max-w-xs flex-col items-center text-center">
+              <div className="flex size-12 items-center justify-center rounded-full bg-[var(--bg-elevated)] text-[var(--ink-secondary)]">
+                <QrIcon width={22} height={22} />
+              </div>
+              <p className="mt-3 text-sm font-semibold text-[var(--ink-primary)]">
+                Enter content to preview QR code
+              </p>
+              <p className="mt-1 text-xs text-[var(--ink-secondary)]">
+                Type a URL, Wi-Fi network, vCard, event, email, or phone number on the left to inspect and export.
+              </p>
             </div>
-            <p className="mt-3 text-sm font-medium text-[var(--ink-primary)]">
-              Enter content to preview QR code
-            </p>
-            <p className="mt-1 text-xs text-[var(--ink-secondary)]">
-              Type a URL, Wi-Fi network, email, or phone number on the left to inspect and export.
-            </p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {errorMessage ? (
-        <div className="border-t border-[var(--border-hairline)] p-3">
+        <div className="px-5 pt-3">
           <NoticeBanner tone="error" message={errorMessage} />
         </div>
       ) : null}
 
       {output && (output.isLowContrast || output.isInverted) ? (
-        <div className="border-t border-[var(--border-hairline)] px-4 pt-3">
+        <div className="px-5 pt-3">
           <NoticeBanner
             tone="warning"
             message={
@@ -109,7 +111,7 @@ export function QrPreviewStage({
         </div>
       ) : null}
 
-      <div className="space-y-3 border-t border-[var(--border-hairline)] bg-[var(--bg-surface)] p-4">
+      <div className="space-y-3 p-5">
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[var(--ink-secondary)]">
           <span className="tabular-nums">
             Raster export: {settings.size} × {settings.size} px
@@ -119,12 +121,12 @@ export function QrPreviewStage({
           </span>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2.5">
           <button
             type="button"
             disabled={!output || busyFormat !== null}
             onClick={() => onDownload('svg')}
-            className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[var(--accent-primary)] px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[var(--accent-primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[var(--accent-primary)] px-3 py-2.5 text-sm font-bold text-[var(--accent-primary-ink)] hover:bg-[var(--accent-primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             <DownloadIcon width={16} height={16} />
             <span>{busyFormat === 'svg' ? 'Saving' : 'SVG'}</span>
@@ -134,7 +136,7 @@ export function QrPreviewStage({
             type="button"
             disabled={!output || busyFormat !== null}
             onClick={() => onDownload('png')}
-            className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[var(--border-strong)] bg-[var(--bg-surface)] px-3 py-2.5 text-sm font-semibold text-[var(--ink-primary)] transition-colors hover:bg-[var(--bg-elevated)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[var(--accent-primary)] px-3 py-2.5 text-sm font-bold text-[var(--accent-primary-ink)] hover:bg-[var(--accent-primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             <DownloadIcon width={16} height={16} />
             <span>{busyFormat === 'png' ? 'Saving' : 'PNG'}</span>
@@ -144,19 +146,19 @@ export function QrPreviewStage({
             type="button"
             disabled={!output || busyFormat !== null}
             onClick={() => onDownload('jpg')}
-            className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[var(--border-strong)] bg-[var(--bg-surface)] px-3 py-2.5 text-sm font-semibold text-[var(--ink-primary)] transition-colors hover:bg-[var(--bg-elevated)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[var(--accent-primary)] px-3 py-2.5 text-sm font-bold text-[var(--accent-primary-ink)] hover:bg-[var(--accent-primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             <DownloadIcon width={16} height={16} />
             <span>{busyFormat === 'jpg' ? 'Saving' : 'JPG'}</span>
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
             disabled={!output}
             onClick={onCopySvg}
-            className="inline-flex items-center justify-center gap-1.5 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-3 py-1.5 text-xs font-medium text-[var(--ink-primary)] transition-colors hover:bg-[var(--bg-recessed)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[var(--bg-elevated)] px-3 py-2 text-xs font-semibold text-[var(--ink-secondary)] hover:bg-[var(--bg-elevated-hover)] hover:text-[var(--ink-primary)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {copiedFeedback === 'svg' ? <CheckIcon width={14} height={14} /> : <CopyIcon width={14} height={14} />}
             <span>{copiedFeedback === 'svg' ? 'Copied SVG' : 'Copy SVG code'}</span>
@@ -166,7 +168,7 @@ export function QrPreviewStage({
             type="button"
             disabled={!output}
             onClick={onCopyPng}
-            className="inline-flex items-center justify-center gap-1.5 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-elevated)] px-3 py-1.5 text-xs font-medium text-[var(--ink-primary)] transition-colors hover:bg-[var(--bg-recessed)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[var(--bg-elevated)] px-3 py-2 text-xs font-semibold text-[var(--ink-secondary)] hover:bg-[var(--bg-elevated-hover)] hover:text-[var(--ink-primary)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {copiedFeedback === 'png' ? <CheckIcon width={14} height={14} /> : <CopyIcon width={14} height={14} />}
             <span>{copiedFeedback === 'png' ? 'Copied PNG' : 'Copy PNG image'}</span>

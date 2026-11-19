@@ -47,7 +47,7 @@ export default function App() {
     <div className="min-h-dvh bg-[var(--bg-canvas)] text-[var(--ink-primary)]">
       <WorkbenchHeader activeTool={activeTool} onSelectTool={handleSelectTool} />
 
-      <main className="mx-auto max-w-[1380px] px-4 py-5 sm:px-6">
+      <main className="mx-auto max-w-[1380px] px-4 py-6 sm:px-6 sm:py-7">
         <Suspense fallback={workspaceFallback}>
           {mountedTools.converter ? (
             <div className={activeTool === 'converter' ? 'block' : 'hidden'}>

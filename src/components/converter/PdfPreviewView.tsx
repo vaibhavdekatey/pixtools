@@ -4,9 +4,10 @@ import { ChevronLeftIcon, ChevronRightIcon } from '../icons/Icons'
 
 interface PdfPreviewViewProps {
   sheets: PdfSheetPreviewItem[]
+  isExpanded?: boolean
 }
 
-export function PdfPreviewView({ sheets }: PdfPreviewViewProps) {
+export function PdfPreviewView({ sheets, isExpanded = false }: PdfPreviewViewProps) {
   const [pageIndex, setPageIndex] = useState(0)
   const [showMarginGuide, setShowMarginGuide] = useState(true)
 
@@ -18,7 +19,7 @@ export function PdfPreviewView({ sheets }: PdfPreviewViewProps) {
   const marginPercentY = (current.marginPt / current.sheetHeightPt) * 100
 
   return (
-    <div className="space-y-3">
+    <div className={isExpanded ? 'flex min-h-0 flex-1 flex-col gap-3' : 'space-y-3'}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           {sheets.length > 1 ? (
@@ -63,12 +64,20 @@ export function PdfPreviewView({ sheets }: PdfPreviewViewProps) {
         </label>
       </div>
 
-      <div className="optical-well-grid flex min-h-[290px] items-center justify-center rounded-md border border-[var(--border-hairline)] p-5 sm:min-h-[380px] sm:p-8">
+      <div
+        className={[
+          'optical-well-grid flex items-center justify-center rounded-xl p-5 sm:p-8',
+          isExpanded ? 'min-h-[340px] flex-1' : 'min-h-[320px] sm:min-h-[440px]',
+        ].join(' ')}
+      >
         <div
           style={{
             aspectRatio: `${current.sheetWidthPt} / ${current.sheetHeightPt}`,
           }}
-          className="pdf-sheet-shadow relative flex max-h-[340px] w-auto max-w-full items-center justify-center overflow-hidden border border-[#d6dee8] bg-white"
+          className={[
+            'pdf-sheet-shadow relative flex w-auto max-w-full items-center justify-center overflow-hidden border border-[#d6dee8] bg-white',
+            isExpanded ? 'max-h-[72dvh]' : 'max-h-[390px]',
+          ].join(' ')}
         >
           <div
             style={{

@@ -61,10 +61,10 @@ export function FileQueueList({
             <li
               key={item.id}
               className={[
-                'flex items-center gap-2.5 rounded-lg border p-2 transition-colors',
+                'flex items-center gap-2.5 rounded-lg p-2 transition-colors',
                 isSelected
-                  ? 'border-[var(--accent-primary)] bg-[var(--accent-primary-soft)]/50'
-                  : 'border-[var(--border-hairline)] bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)]',
+                  ? 'bg-[#1f2c3a]'
+                  : 'bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated-hover)]',
               ].join(' ')}
             >
               <button
@@ -72,7 +72,7 @@ export function FileQueueList({
                 onClick={() => onSelect(item.id)}
                 className="flex min-w-0 flex-1 items-center gap-2.5 text-left"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded border border-[var(--border-hairline)] bg-[var(--bg-elevated)]">
+                <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-md bg-[var(--bg-recessed)]">
                   {item.sourceFormat === 'pdf' ? (
                     <FilePdfIcon width={18} height={18} className="text-[var(--danger)]" />
                   ) : (

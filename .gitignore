@@ -31,3 +31,6 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Large local agent skill bundle
+.agents/skills/design-taste-frontend/

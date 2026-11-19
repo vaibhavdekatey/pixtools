@@ -20,9 +20,9 @@ export function PageArtifactStrip({
   const active = artifacts[activeIndex] ?? artifacts[0]
 
   return (
-    <div className="space-y-2 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-elevated)] p-2.5">
+    <div className="space-y-2 rounded-xl bg-[var(--bg-elevated)] p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="inline-flex items-center gap-1 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-surface)] p-0.5">
+        <div className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-recessed)] p-0.5">
           <button
             type="button"
             disabled={activeIndex === 0}
@@ -61,10 +61,10 @@ export function PageArtifactStrip({
               type="button"
               onClick={() => onSelect(idx)}
               className={[
-                'flex shrink-0 flex-col items-center gap-1 rounded-md border p-1 transition-colors',
+                'flex shrink-0 flex-col items-center gap-1 rounded-lg p-1.5 transition-colors',
                 isSelected
-                  ? 'border-[var(--accent-primary)] bg-[var(--accent-primary-soft)]'
-                  : 'border-[var(--border-hairline)] bg-[var(--bg-surface)] hover:border-[var(--border-strong)]',
+                  ? 'bg-[#2a3f54] ring-1 ring-[var(--accent-primary)]'
+                  : 'bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated-hover)]',
               ].join(' ')}
             >
               <img
